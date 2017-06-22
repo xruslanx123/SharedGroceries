@@ -38,7 +38,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         item.timeStamp = self.dateFormatter.date(from: date);
                     }
                     for i in self.list{
-                        if(i.title == title){
+                        if(i.title.caseInsensitiveCompare(title) == ComparisonResult.orderedSame){
                             i.title = item.title;
                             i.count = item.count;
                             i.timeStamp = item.timeStamp;
@@ -55,7 +55,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if let dict = snapshot.value as? Dictionary<String, Any>{
                 if let title = dict["title"] as? String{
                     for i in 0..<self.list.count{
-                        if(self.list[i].title == title){
+                        if(self.list[i].title.caseInsensitiveCompare(title) == ComparisonResult.orderedSame){
                             self.list.remove(at: i);
                             self.update();
                             return;
@@ -76,7 +76,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         item.timeStamp = self.dateFormatter.date(from: date);
                     }
                     for i in self.list{
-                        if(i.title == title){
+                        if(i.title.caseInsensitiveCompare(title) == ComparisonResult.orderedSame){
                             i.title = item.title;
                             i.count = item.count;
                             i.timeStamp = item.timeStamp;
@@ -96,7 +96,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if(!(textField.text?.isEmpty)!){
             let title = textField.text!;
             for item in list {
-                if(item.title == title){
+                if(item.title.caseInsensitiveCompare(title) == ComparisonResult.orderedSame){
                     item.count! += 1;
                     self.ref.child(item.title).child("count").setValue(item.count);
                     return;
