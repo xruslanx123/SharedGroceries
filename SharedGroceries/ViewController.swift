@@ -14,6 +14,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var ref: FIRDatabaseReference!;
     var list: [Item]!;
     var dateFormatter: DateFormatter!;
+    var diraction = false;
     @IBOutlet weak var textField: UITextField!;
     @IBOutlet weak var tableView: UITableView!;
     
@@ -23,7 +24,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self;
         tableView.dataSource = self;
         dateFormatter = DateFormatter();
-        dateFormatter.dateFormat = "";
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss z";
         self.ref = FIRDatabase.database().reference();
         ref.observe(FIRDataEventType.childAdded) { (snapshot:FIRDataSnapshot) in
             if let dict = snapshot.value as? Dictionary<String, Any>{
@@ -152,6 +153,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
 
+    func sortByTitle(){
+        diraction = !diraction;
+        if(diraction){
+            list = list.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == ComparisonResult.orderedAscending }
+        }else{
+            list = list.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == ComparisonResult.orderedDescending }
+        }
+        update();
+        update()
+    }
+    
+    func sortByDate(){
+        diraction = !diraction;
+        if(diraction){
+            list = list.sorted(by: { $0.timeStamp.compare($1.timeStamp) == ComparisonResult.orderedAscending })
+        }else{
+            list = list.sorted(by: { $0.timeStamp.compare($1.timeStamp) == ComparisonResult.orderedDescending })
+        }
+        update();
+    }
+    @IBAction func sortByTitleAction(_ sender: Any) {
+        sortByTitle()
+    }
+    @IBAction func sortByDateAction(_ sender: Any) {
+        sortByDate()
+    }
 
 }
 
